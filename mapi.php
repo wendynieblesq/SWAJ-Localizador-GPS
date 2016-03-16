@@ -1,9 +1,9 @@
 <?php
 
-$servername = 'localhost';
-$username = 'root';
-$password = '0';
-$dbname = 'historial';
+$servername = "localhost";
+$username = "root";
+$password = "0";
+$dbname = "historial";
 
 $con = mysql_connect($servername,$username,$password) or die ("Problemas al conectar");
 mysql_select_db($dbname,$con) or die ("Problema al conectar con la DB");

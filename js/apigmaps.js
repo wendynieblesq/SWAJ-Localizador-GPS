@@ -22,7 +22,7 @@ function initialize() {
 var mapProp = {
   center:myCenter,
   zoom:17,
-  styles: [{"featureType":"water","elementType":"all","stylers":[{"hue":"#7fc8ed"},{"saturation":55},{"lightness":-6},{"visibility":"on"}]},{"featureType":"water","elementType":"labels","stylers":[{"hue":"#7fc8ed"},{"saturation":55},{"lightness":-6},{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"hue":"#83cead"},{"saturation":1},{"lightness":-15},{"visibility":"on"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"hue":"#f3f4f4"},{"saturation":-84},{"lightness":59},{"visibility":"on"}]},{"featureType":"landscape","elementType":"labels","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"off"}]},{"featureType":"road","elementType":"geometry","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"on"}]},{"featureType":"road","elementType":"labels","stylers":[{"hue":"#bbbbbb"},{"saturation":-100},{"lightness":26},{"visibility":"on"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"hue":"#ffcc00"},{"saturation":100},{"lightness":-35},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"hue":"#ffcc00"},{"saturation":100},{"lightness":-22},{"visibility":"on"}]},{"featureType":"poi.school","elementType":"all","stylers":[{"hue":"#d7e4e4"},{"saturation":-60},{"lightness":23},{"visibility":"on"}]}]
+  styles: [{"featureType":"water","elementType":"all","stylers":[{"hue":"#7fc8ed"},{"saturation":55},{"lightness":-6},{"visibility":"on"}]},{"featureType":"water","elementType":"labels","stylers":[{"hue":"#7fc8ed"},{"saturation":55},{"lightness":-6},{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"hue":"#83cead"},{"saturation":1},{"lightness":-15},{"visibility":"off"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"hue":"#f3f4f4"},{"saturation":-84},{"lightness":59},{"visibility":"on"}]},{"featureType":"landscape","elementType":"labels","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"off"}]},{"featureType":"road","elementType":"geometry","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"on"}]},{"featureType":"road","elementType":"labels","stylers":[{"hue":"#bbbbbb"},{"saturation":-100},{"lightness":26},{"visibility":"on"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"hue":"#ffcc00"},{"saturation":100},{"lightness":-35},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"hue":"#ffcc00"},{"saturation":100},{"lightness":-22},{"visibility":"on"}]},{"featureType":"poi.school","elementType":"all","stylers":[{"hue":"#d7e4e4"},{"saturation":-60},{"lightness":23},{"visibility":"on"}]}]
   };
     map=new google.maps.Map(document.getElementById("map1"),mapProp);
     polilinea.setMap(map);
@@ -37,32 +37,20 @@ function SetMarker(){
 
     var myCentr=new google.maps.LatLng(parseFloat(lat),parseFloat(lon));
     marker=new google.maps.Marker({
-        position:myCentr,
-        icon:image
-      });
-
+    position:myCentr,
+    icon:image
+  });
+    
     marker.setMap(map);
     var contentString = "Latitud: "  + lat +"</br>"+ "Longitud: " +  lon +"</br>"+ "Fecha: " + fecha;
-
+    
     var infowindow = new google.maps.InfoWindow({
-        content: contentString
+    content: contentString
     });
     
-//    marker.addListener(map, 'click', function(event) {
-//        var myLatLng = event.latLng;
-//        var lat = myLatLng.lat();
-//        var lng = myLatLng.lng();
-//        var myCentrInfo=new google.maps.LatLng(parseFloat(lat),parseFloat(lng));
-//        infowindow.close();
-//        infowindow.open(map, myCentrInfo);
-//        
-//    });
-    
-    marker.addListener('click', function(event) {
-        infowindow.close(map, marker);
-        infowindow.open(map, marker);
+    marker.addListener('click', function() {
+    infowindow.open(map, marker);
     });
-    
 	rute.push(myCentr); 
 	polilinea.setPath(rute);
     polilinea.setMap(map);

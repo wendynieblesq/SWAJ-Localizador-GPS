@@ -1,10 +1,3 @@
-
-<!--
-Author: W3layouts
-Author URL: http://w3layouts.com
-License: Creative Commons Attribution 3.0 Unported
-License URL: http://creativecommons.org/licenses/by/3.0/
--->
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -93,7 +86,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <div class="sidebar-nav navbar-collapse">
                 <ul class="nav" id="side-menu">
                                              
-                <li><a href="#" class=" hvr-bounce-to-right"><i class="fa fa-map-marker nav_icon"></i>Localización</a></li>
+                <li><a href="maps.php" class=" hvr-bounce-to-right"><i class="fa fa-map-marker nav_icon"></i>Localización</a></li>
 	
                 <li><a href="forms.php" class=" hvr-bounce-to-right"><i class="fa fa-history nav_icon">
                 </i>Historial</a></li>
@@ -138,17 +131,97 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
      
 <!---->
+            
+   
     
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
             
-    <script>
-        setInterval(function(){
-            $('#result').load('mapi.php'); 
-
-        },10000);    
-    </script>
+   
 <!--API Gmaps-->   
-<script src="js/apigmaps.js"> </script>
+    <script> 
+        window.onload = function(){
+        var myCenter=new google.maps.LatLng(parseFloat(lat),parseFloat(lon));
+        var marker;
+        var map;
+        var apiKey = 'AIzaSyDiej_4UQcx04uFtHiCUEwvayOa8ERBTs0';
+            
+            
+        var hisrute = [
+        <?php
+        $servername = "localhost";
+        $username = "root";
+        $password = "0";
+        $dbname = "historial";
+        $con = mysql_connect($servername,$username,$password) or die ("Problemas al conectar");
+        mysql_select_db($dbname,$con) or die ("Problema al conectar con la DB");
+        $start = date($_POST["datestart"]); 
+        $end = date($_POST["dateend"]); 
+        $query = "SELECT * FROM gps WHERE fecha BETWEEN '$start' AND '$end' ";
+        $historico=mysql_query($query)or die(mysql_error());
+
+        while($row = mysql_fetch_assoc($historico)){
+                $lat = $row['latitud'];
+                $lon = $row['longitud'];
+                echo 'new google.maps.LatLng('.$lat.', '.$lon.'),';
+            }
+        ?>
+        ];
+            
+            
+        var polilinea = new google.maps.Polyline({ path: hisrute,   strokeColor: '#c0392b',  strokeOpacity: 1.0,	 strokeWeight: 5	});
+        var image = {
+            url: 'http://icons.iconarchive.com/icons/elegantthemes/beautiful-flat/32/taxi-icon.png',
+            scaledSize: new google.maps.Size(32, 32),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(16, 16)
+             }
+
+        var drawingManager;
+        var placeIdArray = [];
+        var polylines = [10];
+        var snappedCoordinates = [];
+
+
+        function initialize() {
+        var mapProp = {
+          center:myCenter,
+          zoom:17,
+          styles: [{"featureType":"water","elementType":"all","stylers":[{"hue":"#7fc8ed"},{"saturation":55},{"lightness":-6},{"visibility":"on"}]},{"featureType":"water","elementType":"labels","stylers":[{"hue":"#7fc8ed"},{"saturation":55},{"lightness":-6},{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"hue":"#83cead"},{"saturation":1},{"lightness":-15},{"visibility":"on"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"hue":"#f3f4f4"},{"saturation":-84},{"lightness":59},{"visibility":"on"}]},{"featureType":"landscape","elementType":"labels","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"off"}]},{"featureType":"road","elementType":"geometry","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"on"}]},{"featureType":"road","elementType":"labels","stylers":[{"hue":"#bbbbbb"},{"saturation":-100},{"lightness":26},{"visibility":"on"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"hue":"#ffcc00"},{"saturation":100},{"lightness":-35},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"hue":"#ffcc00"},{"saturation":100},{"lightness":-22},{"visibility":"on"}]},{"featureType":"poi.school","elementType":"all","stylers":[{"hue":"#d7e4e4"},{"saturation":-60},{"lightness":23},{"visibility":"on"}]}]
+          };
+            map=new google.maps.Map(document.getElementById("map1"),mapProp);
+            polilinea.setMap(map);
+            SetMarker();
+
+        };
+
+        function SetMarker(){
+
+        var myCentr=new google.maps.LatLng(parseFloat(lat),parseFloat(lon));
+        marker=new google.maps.Marker({
+            position:myCentr,
+            icon:image
+          });
+
+            marker.setMap(map);
+            var contentString = "Latitud: "  + lat +"</br>"+ "Longitud: " +  lon +"</br>"+ "Fecha: " + fecha;
+
+            var infowindow = new google.maps.InfoWindow({
+            content: contentString
+            });
+
+            marker.addListener('click', function() {
+            infowindow.open(map, marker);
+            });
+            polilinea.setPath(hisrute);
+            polilinea.setMap(map);
+            map.panTo(myCentr);
+            
+        }
+
+
+                initialize();
+                }
+    </script>
     
     
 <!--scrolling js-->
@@ -157,4 +230,5 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!--//scrolling js-->
 </body>
 </html>
+
 
